@@ -12,8 +12,8 @@ class ContactDataSource {
         val querySnapshot = FirebaseFirestore.getInstance().collection("usuarios").document(uid)
             .collection("contactos").get().await()
         querySnapshot.map {
-            it.toObject(Contact::class.java)?.let {
-                contactsList.add(it)
+            it.toObject(Contact::class.java)?.let { contact ->
+                contactsList.add(contact)
             }
         }
         return Resource.Success(contactsList)

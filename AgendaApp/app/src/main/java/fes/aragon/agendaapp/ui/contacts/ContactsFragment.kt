@@ -1,7 +1,6 @@
 package fes.aragon.agendaapp.ui.contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,7 +10,7 @@ import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.Contact
 import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentContactsBinding
-import fes.aragon.agendaapp.domain.ContactRepoImpl
+import fes.aragon.agendaapp.domain.database.ContactRepoImpl
 import fes.aragon.agendaapp.domain.Resource
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
@@ -19,9 +18,11 @@ import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
     private lateinit var binding: FragmentContactsBinding
-    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(
+    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(
+        ContactRepoImpl(
         ContactDataSource()
-    )) }
+    )
+    ) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

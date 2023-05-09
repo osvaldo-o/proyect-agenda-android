@@ -3,7 +3,7 @@ package fes.aragon.agendaapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import fes.aragon.agendaapp.domain.ContactsRepo
+import fes.aragon.agendaapp.domain.database.ContactsRepo
 import fes.aragon.agendaapp.domain.Resource
 import kotlinx.coroutines.Dispatchers
 

@@ -31,7 +31,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register,) {
             val email = binding.editTextEmail.text.toString().trim()
             val password = binding.editTextPassword.text.toString().trim()
             if (validate(name, email, password)){
-                viewModel.signUp(email, password).observe(viewLifecycleOwner, Observer {
+                viewModel.signUp(email, password,name).observe(viewLifecycleOwner, Observer {
                     when(it){
                         is Resource.Failure -> {
                             Toast.makeText(requireContext(),"${it.exception}", Toast.LENGTH_SHORT).show()

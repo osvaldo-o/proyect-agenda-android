@@ -26,7 +26,19 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentContactsBinding.bind(view)
 
-        viewModel.fetchLatestContacts("i39xohhuQtksjc6CPVbB").observe(viewLifecycleOwner, Observer {
+        FirebaseAuth.getInstance().uid?.let { uid ->
+            Toast.makeText(requireContext(),"$uid",Toast.LENGTH_SHORT).show()
+            getAllContacts(uid)
+        }
+
+        binding.close.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
+        }
+    }
+
+    private fun getAllContacts(uid: String){
+        viewModel.fetchLatestContacts(uid).observe(viewLifecycleOwner, Observer {
             when(it){
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -41,11 +53,6 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
                 }
             }
         })
-
-        binding.close.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
-        }
     }
 
     override fun onClick(contact: Contact) {

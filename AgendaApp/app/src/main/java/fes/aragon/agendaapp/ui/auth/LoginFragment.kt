@@ -12,7 +12,6 @@ import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.remote.AuthDataSource
 import fes.aragon.agendaapp.databinding.FragmentLoginBinding
 import fes.aragon.agendaapp.domain.Resource
-import fes.aragon.agendaapp.domain.auth.AuthRepo
 import fes.aragon.agendaapp.domain.auth.AuthRepoImpl
 import fes.aragon.agendaapp.viewmodel.AuthViewModel
 import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
@@ -29,6 +28,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding = FragmentLoginBinding.bind(view)
         isUserLoggedIn()
         doLogin()
+        goToSignUp()
     }
 
     private fun isUserLoggedIn() {
@@ -41,20 +41,28 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.buttonSingIn.setOnClickListener {
             val email = binding.editTextEmail.text.toString().trim()
             val password = binding.editTextPassword.text.toString().trim()
-            validateCredentials(email, password)
-            signIn(email, password)
+            if(validateCredentials(email, password)){
+                signIn(email, password)
+            }
         }
     }
 
-    private fun validateCredentials(email: String, password: String){
-        if (email.isNotEmpty()){
+    private fun goToSignUp() {
+        binding.buttonToRegister.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment2)
+        }
+    }
+
+    private fun validateCredentials(email: String, password: String): Boolean{
+        if (email.isEmpty()){
             binding.editTextEmail.error = "Email vacio"
-            return
+            return false
         }
-        if (password.isNotEmpty()){
+        if (password.isEmpty()){
             binding.editTextPassword.error = "Password vacio"
-            return
+            return false
         }
+        return true
     }
 
     private fun signIn(email: String,password: String){

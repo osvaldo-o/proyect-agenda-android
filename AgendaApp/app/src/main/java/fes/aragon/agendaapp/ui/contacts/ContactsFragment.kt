@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.Contact
 import fes.aragon.agendaapp.data.remote.ContactDataSource
@@ -18,11 +20,7 @@ import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
     private lateinit var binding: FragmentContactsBinding
-    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(
-        ContactRepoImpl(
-        ContactDataSource()
-    )
-    ) }
+    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,6 +41,11 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
                 }
             }
         })
+
+        binding.close.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
+        }
     }
 
     override fun onClick(contact: Contact) {

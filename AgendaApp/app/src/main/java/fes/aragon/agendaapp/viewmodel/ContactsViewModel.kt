@@ -3,18 +3,33 @@ package fes.aragon.agendaapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import fes.aragon.agendaapp.data.model.Contact
 import fes.aragon.agendaapp.domain.database.ContactsRepo
 import fes.aragon.agendaapp.domain.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
 
     fun fetchLatestContacts(uid: String) = liveData(Dispatchers.IO){
         emit(Resource.Loading())
-        try {
-            emit(repo.getAllContacts(uid))
-        } catch (e: Exception){
-            emit(Resource.Failure(e))
+        kotlin.runCatching {
+            repo.getAllContacts(uid)
+        }.onSuccess {
+            it.collect{
+                emit(it)
+            }
+        }.onFailure {
+            emit(Resource.Failure(Exception(it.message)))
+        }
+    }
+
+    fun addContact(uid: String,contact: Contact){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.addContact(uid, contact)
         }
     }
 }

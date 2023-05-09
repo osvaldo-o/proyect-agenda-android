@@ -26,9 +26,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentContactsBinding.bind(view)
 
-        FirebaseAuth.getInstance().uid?.let { uid ->
-            Toast.makeText(requireContext(),"$uid",Toast.LENGTH_SHORT).show()
-            getAllContacts(uid)
+        val uid = FirebaseAuth.getInstance().uid
+
+        Toast.makeText(requireContext(),"$uid",Toast.LENGTH_SHORT).show()
+        uid?.let { getAllContacts(it) }
+
+        binding.addContact.setOnClickListener {
+            uid?.let { viewModel.addContact(uid,Contact("osvaldolanuza@aragon.unam.mx","Ösvaldo.exe","https://media.revistagq.com/photos/62a0a996223a33e985e4d59a/4:3/w_1199,h_899,c_limit/1072434_110615-cc-Darth-Vader-Thumb.jpg",
+                5549471704.toInt()
+            )) }
         }
 
         binding.close.setOnClickListener {

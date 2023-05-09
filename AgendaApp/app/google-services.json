@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "757544257000",
+    "project_id": "agenda-app-95f0d",
+    "storage_bucket": "agenda-app-95f0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757544257000:android:e02b7f9fe2fbb58616505d",
+        "android_client_info": {
+          "package_name": "fes.aragon.agendaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757544257000-ao3hkca8n4dre07qnbb290fj1tu3soq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPNLp4EEdc7SnSALb4aKZMYUxU_yjIgzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757544257000-ao3hkca8n4dre07qnbb290fj1tu3soq9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

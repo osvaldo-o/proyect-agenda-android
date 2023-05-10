@@ -1,10 +1,12 @@
 package fes.aragon.agendaapp.data.remote
 
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import fes.aragon.agendaapp.data.model.Contact
 import fes.aragon.agendaapp.domain.Resource
 import kotlinx.coroutines.channels.awaitClose
@@ -42,19 +44,10 @@ class ContactDataSource {
         awaitClose{ subscribe?.remove() }
     }
 
-    /*suspend fun getAllContacts(uid: String) : Resource<List<Contact>> {
-        val contactsList = mutableListOf<Contact>()
-        val querySnapshot = FirebaseFirestore.getInstance().collection("usuarios").document(uid)
-            .collection("contactos").get().await()
-        querySnapshot.map {
-            it.toObject(Contact::class.java)?.let { contact ->
-                contactsList.add(contact)
-            }
-        }
-        return Resource.Success(contactsList)
-    }*/
-
-    suspend fun addContact(uid: String, contact: Contact) {
+    suspend fun addContact(uid: String, contact: Contact, uri: Uri) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imagesRef = storageRef.child("images/${UUID.randomUUID()}.jpg")
+        contact.picture = imagesRef.putFile(uri).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").add(contact).await()
     }

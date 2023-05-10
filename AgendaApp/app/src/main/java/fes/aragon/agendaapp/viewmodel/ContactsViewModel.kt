@@ -1,5 +1,6 @@
 package fes.aragon.agendaapp.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
@@ -27,9 +28,12 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }
     }
 
-    fun addContact(uid: String,contact: Contact){
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.addContact(uid, contact)
+    fun addContact(uid: String,contact: Contact, uri: Uri) = liveData(Dispatchers.IO) {
+        emit(Resource.Loading())
+        try {
+            emit(Resource.Success(repo.addContact(uid,contact,uri)))
+        }catch (e: Exception){
+            emit(Resource.Failure(e))
         }
     }
 }

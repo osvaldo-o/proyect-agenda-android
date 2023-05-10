@@ -34,7 +34,6 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
         binding.addContact.setOnClickListener {
             findNavController().navigate(R.id.action_contactsFragment_to_addContactFragment)
-            //uid?.let { viewModel.addContact(uid,Contact("osvaldolanuza@aragon.unam.mx","Ösvaldo.exe","https://media.revistagq.com/photos/62a0a996223a33e985e4d59a/4:3/w_1199,h_899,c_limit/1072434_110615-cc-Darth-Vader-Thumb.jpg","5547899021")) }
         }
 
         binding.close.setOnClickListener {

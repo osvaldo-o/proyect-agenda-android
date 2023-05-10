@@ -2,8 +2,6 @@ package fes.aragon.agendaapp.data.remote
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import fes.aragon.agendaapp.data.model.Contact
 import fes.aragon.agendaapp.domain.Resource
 import kotlinx.coroutines.channels.awaitClose
@@ -18,13 +16,13 @@ class ContactDataSource {
 
         var reference: CollectionReference? = null
         try {
-            reference = FirebaseFirestore.getInstance().collection("usuarios").document(uid)
-                .collection("contactos")
+            reference = FirebaseFirestore.getInstance().collection("users").document(uid)
+                .collection("contacts")
         }catch (e: Throwable){
             close(e)
         }
 
-        val subscribe = reference?.addSnapshotListener { value, error ->
+        val subscribe = reference?.addSnapshotListener { value, _ ->
             if (value == null) return@addSnapshotListener
             try {
                 contactsList.clear()
@@ -53,7 +51,7 @@ class ContactDataSource {
     }*/
 
     suspend fun addContact(uid: String, contact: Contact) {
-       FirebaseFirestore.getInstance().collection("usuarios").document(uid)
-            .collection("contactos").document(UUID.randomUUID().toString()).set(contact).await()
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+            .collection("contacts").add(contact).await()
     }
 }

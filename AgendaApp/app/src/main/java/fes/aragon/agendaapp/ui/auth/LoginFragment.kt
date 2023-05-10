@@ -70,7 +70,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             when(it){
                 is Resource.Success -> {
                     findNavController().navigate(R.id.action_loginFragment_to_contactsFragment)
-                    Toast.makeText(requireContext(),"Bienvenido ${it.data?.email}",Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_SHORT).show()

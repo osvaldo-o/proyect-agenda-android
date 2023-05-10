@@ -1,5 +1,8 @@
 package fes.aragon.agendaapp.data.remote
 
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import fes.aragon.agendaapp.data.model.Contact
@@ -28,8 +31,9 @@ class ContactDataSource {
                 contactsList.clear()
                 value.map {
                     contactsList.add(it.toObject(Contact::class.java))
+                    println("id_document"+it.id)
                 }
-            }catch (e: Exception){
+            }catch (e: Throwable){
                 close(e)
             }
             trySend(Resource.Success(contactsList)).isSuccess

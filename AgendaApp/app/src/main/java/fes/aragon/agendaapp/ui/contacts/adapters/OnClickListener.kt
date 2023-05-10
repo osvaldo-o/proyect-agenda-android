@@ -1,4 +1,4 @@
-package fes.aragon.agendaapp.ui.contacts
+package fes.aragon.agendaapp.ui.contacts.adapters
 
 import fes.aragon.agendaapp.data.model.Contact
 

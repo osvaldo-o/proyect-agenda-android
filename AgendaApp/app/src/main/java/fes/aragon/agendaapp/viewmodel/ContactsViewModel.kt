@@ -18,8 +18,8 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         emit(Resource.Loading())
         kotlin.runCatching {
             repo.getAllContacts(uid)
-        }.onSuccess {
-            it.collect{
+        }.onSuccess { flow ->
+            flow.collect{
                 emit(it)
             }
         }.onFailure {

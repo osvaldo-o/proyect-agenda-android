@@ -14,6 +14,8 @@ import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentContactsBinding
 import fes.aragon.agendaapp.domain.database.ContactRepoImpl
 import fes.aragon.agendaapp.domain.Resource
+import fes.aragon.agendaapp.ui.contacts.adapters.ContactAdapter
+import fes.aragon.agendaapp.ui.contacts.adapters.OnClickListener
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 
@@ -28,13 +30,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
         val uid = FirebaseAuth.getInstance().uid
 
-        Toast.makeText(requireContext(),"$uid",Toast.LENGTH_SHORT).show()
         uid?.let { getAllContacts(it) }
 
         binding.addContact.setOnClickListener {
-            uid?.let { viewModel.addContact(uid,Contact("osvaldolanuza@aragon.unam.mx","Ösvaldo.exe","https://media.revistagq.com/photos/62a0a996223a33e985e4d59a/4:3/w_1199,h_899,c_limit/1072434_110615-cc-Darth-Vader-Thumb.jpg",
-                5549471704.toInt()
-            )) }
+            uid?.let { viewModel.addContact(uid,Contact("osvaldolanuza@aragon.unam.mx","Ösvaldo.exe","https://media.revistagq.com/photos/62a0a996223a33e985e4d59a/4:3/w_1199,h_899,c_limit/1072434_110615-cc-Darth-Vader-Thumb.jpg","5547899021")) }
         }
 
         binding.close.setOnClickListener {

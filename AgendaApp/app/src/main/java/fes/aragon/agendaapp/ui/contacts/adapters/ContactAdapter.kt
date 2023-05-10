@@ -1,4 +1,4 @@
-package fes.aragon.agendaapp.ui.contacts
+package fes.aragon.agendaapp.ui.contacts.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -37,7 +37,7 @@ class ContactAdapter(private val contacts: List<Contact>, private val listener: 
         with(holder){
             binding.name.text = contact.name
             binding.email.text = contact.email
-            binding.phone.text = "${contact.phone}"
+            binding.phone.text = contact.phone
             Glide.with(context)
                 .load(contact.picture)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

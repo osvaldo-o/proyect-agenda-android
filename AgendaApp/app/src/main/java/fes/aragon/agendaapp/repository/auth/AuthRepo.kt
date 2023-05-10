@@ -1,4 +1,4 @@
-package fes.aragon.agendaapp.domain.auth
+package fes.aragon.agendaapp.repository.auth
 
 import com.google.firebase.auth.FirebaseUser
 

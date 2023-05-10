@@ -1,4 +1,4 @@
-package fes.aragon.agendaapp.domain
+package fes.aragon.agendaapp.repository
 
 sealed class Resource<out T> {
     class Loading<out T>: Resource<T>()

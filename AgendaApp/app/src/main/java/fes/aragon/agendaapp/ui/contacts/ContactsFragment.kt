@@ -9,11 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import fes.aragon.agendaapp.R
-import fes.aragon.agendaapp.data.model.Contact
+import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentContactsBinding
-import fes.aragon.agendaapp.domain.database.ContactRepoImpl
-import fes.aragon.agendaapp.domain.Resource
+import fes.aragon.agendaapp.repository.database.ContactRepoImpl
+import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.ui.contacts.adapters.ContactAdapter
 import fes.aragon.agendaapp.ui.contacts.adapters.OnClickListener
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
@@ -60,7 +60,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         })
     }
 
-    override fun onClick(contact: Contact) {
-        Toast.makeText(requireContext(),"${contact.name}",Toast.LENGTH_SHORT).show()
+    override fun onClick(contactUI: ContactUI) {
+        Toast.makeText(requireContext(),"${contactUI.name}",Toast.LENGTH_SHORT).show()
     }
 }

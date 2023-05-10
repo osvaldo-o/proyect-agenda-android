@@ -3,8 +3,8 @@ package fes.aragon.agendaapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
-import fes.aragon.agendaapp.domain.Resource
-import fes.aragon.agendaapp.domain.auth.AuthRepo
+import fes.aragon.agendaapp.repository.Resource
+import fes.aragon.agendaapp.repository.auth.AuthRepo
 import kotlinx.coroutines.Dispatchers
 
 class AuthViewModel(private val repo: AuthRepo) : ViewModel() {

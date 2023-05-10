@@ -20,11 +20,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import fes.aragon.agendaapp.BuildConfig
 import fes.aragon.agendaapp.R
-import fes.aragon.agendaapp.data.model.Contact
+import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentAddContactBinding
-import fes.aragon.agendaapp.domain.Resource
-import fes.aragon.agendaapp.domain.database.ContactRepoImpl
+import fes.aragon.agendaapp.repository.Resource
+import fes.aragon.agendaapp.repository.database.ContactRepoImpl
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 import java.io.File
@@ -105,7 +105,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
 
     private fun addContact (uid: String, photoURI: Uri) {
         val alertDialog = AlertDialog.Builder(requireContext()).setView(R.layout.msg_loading).create()
-        viewModel.addContact(uid, Contact(binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),binding.EditTextPhone.text.toString()),photoURI).observe(viewLifecycleOwner) {
+        viewModel.addContact(uid, ContactUI(binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),binding.EditTextPhone.text.toString()),photoURI).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
                     alertDialog.show()

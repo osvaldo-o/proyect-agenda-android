@@ -1,7 +1,7 @@
 package fes.aragon.agendaapp.ui.contacts.adapters
 
-import fes.aragon.agendaapp.data.model.Contact
+import fes.aragon.agendaapp.data.model.ContactUI
 
 interface OnClickListener {
-    fun onClick(contact: Contact)
+    fun onClick(contactUI: ContactUI)
 }

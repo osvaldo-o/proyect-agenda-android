@@ -8,23 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import fes.aragon.agendaapp.R
-import fes.aragon.agendaapp.data.model.Contact
+import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.databinding.ItemContactBinding
 
-class ContactAdapter(private val contacts: List<Contact>, private val listener: OnClickListener) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
+class ContactAdapter(private val contactUIS: List<ContactUI>, private val listener: OnClickListener) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     private lateinit var context: Context
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val binding = ItemContactBinding.bind(view)
 
-        fun onClick(contact: Contact) {
+        fun onClick(contactUI: ContactUI) {
             binding.root.setOnClickListener {
-                listener.onClick(contact)
+                listener.onClick(contactUI)
             }
         }
     }
 
-    override fun getItemCount(): Int = contacts.size
+    override fun getItemCount(): Int = contactUIS.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -33,7 +33,7 @@ class ContactAdapter(private val contacts: List<Contact>, private val listener: 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val contact = contacts.get(position)
+        val contact = contactUIS[position]
         with(holder){
             binding.name.text = contact.name
             binding.email.text = contact.email

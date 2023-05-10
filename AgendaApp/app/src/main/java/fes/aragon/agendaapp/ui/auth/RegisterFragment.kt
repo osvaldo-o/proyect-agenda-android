@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.remote.AuthDataSource
 import fes.aragon.agendaapp.databinding.FragmentRegisterBinding
-import fes.aragon.agendaapp.domain.Resource
-import fes.aragon.agendaapp.domain.auth.AuthRepoImpl
+import fes.aragon.agendaapp.repository.Resource
+import fes.aragon.agendaapp.repository.auth.AuthRepoImpl
 import fes.aragon.agendaapp.viewmodel.AuthViewModel
 import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
 

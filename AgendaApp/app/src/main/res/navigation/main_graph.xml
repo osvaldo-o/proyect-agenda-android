@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_contactsFragment_to_addContactFragment"
             app:destination="@id/addContactFragment" />
+        <action
+            android:id="@+id/action_contactsFragment_to_updateContactFragment"
+            app:destination="@id/updateContactFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -55,4 +58,9 @@
             android:id="@+id/action_addContactFragment_to_contactsFragment"
             app:destination="@id/contactsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/updateContactFragment"
+        android:name="fes.aragon.agendaapp.ui.contacts.UpdateContactFragment"
+        android:label="fragment_update_contact"
+        tools:layout="@layout/fragment_update_contact" />
 </navigation>

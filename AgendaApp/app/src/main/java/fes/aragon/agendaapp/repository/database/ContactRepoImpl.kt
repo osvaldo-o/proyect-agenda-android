@@ -10,4 +10,5 @@ class ContactRepoImpl(private val dataSource: ContactDataSource) : ContactsRepo 
     override suspend fun getAllContacts(uid: String): Flow<Resource<List<ContactUI>>> = dataSource.getAllContacts(uid)
     override suspend fun addContact(uid: String, contactUI: ContactUI, uri: Uri) = dataSource.addContact(uid,contactUI,uri)
     override suspend fun deleteContact(uid: String, id: String) = dataSource.deleteContact(uid, id)
+    override suspend fun updateContact(uid: String, contactUI: ContactUI, id: String) = dataSource.updateContact(uid, contactUI, id)
 }

@@ -9,4 +9,5 @@ interface ContactsRepo {
     suspend fun getAllContacts(uid: String): Flow<Resource<List<ContactUI>>>
     suspend fun addContact(uid: String, contactUI: ContactUI, uri: Uri)
     suspend fun deleteContact(uid: String, id: String)
+    suspend fun updateContact(uid : String, contactUI: ContactUI, id: String)
 }

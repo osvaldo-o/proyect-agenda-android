@@ -54,4 +54,9 @@ class ContactDataSource {
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").document(id).delete().await()
     }
+
+    suspend fun updateContact(uid : String, contactUI: ContactUI, id: String) {
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+            .collection("contacts").document(id).set(contactUI).await()
+    }
 }

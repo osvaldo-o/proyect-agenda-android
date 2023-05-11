@@ -65,6 +65,17 @@
         android:layout_marginStart="8dp"
         android:clickable="true"
         android:src="@drawable/baseline_delete_24"
+        app:layout_constraintBottom_toBottomOf="@+id/update"
+        app:layout_constraintStart_toEndOf="@+id/update"
+        app:layout_constraintTop_toTopOf="@+id/update" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:src="@drawable/baseline_refresh_24"
         app:layout_constraintBottom_toBottomOf="@+id/addContact"
         app:layout_constraintStart_toEndOf="@+id/addContact"
         app:layout_constraintTop_toTopOf="@+id/addContact" />

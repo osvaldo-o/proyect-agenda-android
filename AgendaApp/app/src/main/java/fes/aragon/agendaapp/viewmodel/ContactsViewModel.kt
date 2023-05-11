@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.repository.database.ContactsRepo
 import fes.aragon.agendaapp.repository.Resource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -33,6 +34,12 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
             emit(Resource.Success(repo.addContact(uid,contactUI,uri)))
         }catch (e: Exception){
             emit(Resource.Failure(e))
+        }
+    }
+
+    fun updateContact(uid : String, contactUI: ContactUI, id: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.updateContact(uid, contactUI, id)
         }
     }
 

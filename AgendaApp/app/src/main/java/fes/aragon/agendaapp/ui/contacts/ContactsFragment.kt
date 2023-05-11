@@ -3,6 +3,7 @@ package fes.aragon.agendaapp.ui.contacts
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -20,15 +21,14 @@ import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
-    private var uid = ""
-    private var idContact = ""
+    private var contactSelect: ContactUI? = null
     private lateinit var binding: FragmentContactsBinding
+    private val uid = FirebaseAuth.getInstance().uid ?: ""
     private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentContactsBinding.bind(view)
-        FirebaseAuth.getInstance().uid?.let { uid = it }
         getAllContacts(uid)
 
         binding.addContact.setOnClickListener {
@@ -38,6 +38,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         binding.close.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
+        }
+
+        binding.update.setOnClickListener {
+            updateContact()
         }
 
         binding.delete.setOnClickListener {
@@ -63,15 +67,24 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         })
     }
 
+    private fun updateContact() {
+        if (contactSelect != null) {
+            findNavController().navigate(R.id.action_contactsFragment_to_updateContactFragment,
+                bundleOf("id" to contactSelect!!.id, "email" to contactSelect!!.email, "name" to contactSelect!!.name, "picture" to contactSelect!!.picture, "phone" to contactSelect!!.phone))
+        } else {
+            Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun deleteContact() {
-        if (idContact.isNotEmpty()){
-            viewModel.deleteContact(uid,idContact)
-        }else{
-            Toast.makeText(requireContext(),"Selecciona un contacto",Toast.LENGTH_SHORT).show()
+        if (contactSelect != null){
+            viewModel.deleteContact(uid, contactSelect!!.id)
+        } else {
+            Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onClick(contactUI: ContactUI) {
-        idContact = contactUI.id
+        contactSelect = contactUI.copy()
     }
 }

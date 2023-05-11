@@ -20,17 +20,16 @@ import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
-
+    private var uid = ""
+    private var idContact = ""
     private lateinit var binding: FragmentContactsBinding
     private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentContactsBinding.bind(view)
-
-        val uid = FirebaseAuth.getInstance().uid
-
-        uid?.let { getAllContacts(it) }
+        FirebaseAuth.getInstance().uid?.let { uid = it }
+        getAllContacts(uid)
 
         binding.addContact.setOnClickListener {
             findNavController().navigate(R.id.action_contactsFragment_to_addContactFragment)
@@ -39,6 +38,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         binding.close.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
+        }
+
+        binding.delete.setOnClickListener {
+            deleteContact()
         }
     }
 
@@ -60,7 +63,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         })
     }
 
+    private fun deleteContact() {
+        if (idContact.isNotEmpty()){
+            viewModel.deleteContact(uid,idContact)
+        }else{
+            Toast.makeText(requireContext(),"Selecciona un contacto",Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onClick(contactUI: ContactUI) {
-        Toast.makeText(requireContext(),"${contactUI.name}",Toast.LENGTH_SHORT).show()
+        idContact = contactUI.id
     }
 }

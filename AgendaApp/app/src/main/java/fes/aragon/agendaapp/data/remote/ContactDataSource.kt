@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import fes.aragon.agendaapp.data.model.ContactDB
 import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.data.model.toContactUI
 import fes.aragon.agendaapp.repository.Resource
@@ -30,7 +31,7 @@ class ContactDataSource {
             try {
                 contactsList.clear()
                 value.map {
-                    contactsList.add(it.toObject(ContactUI::class.java).toContactUI(it.id))
+                    contactsList.add(it.toObject(ContactDB::class.java).toContactUI(it.id))
                 }
             }catch (e: Throwable){
                 close(e)
@@ -47,5 +48,10 @@ class ContactDataSource {
         contactUI.picture = imagesRef.putFile(uri).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").add(contactUI).await()
+    }
+
+    suspend fun deleteContact(uid: String, id: String) {
+        FirebaseFirestore.getInstance().collection("users").document(uid)
+            .collection("contacts").document(id).delete().await()
     }
 }

@@ -9,4 +9,5 @@ import kotlinx.coroutines.flow.Flow
 class ContactRepoImpl(private val dataSource: ContactDataSource) : ContactsRepo {
     override suspend fun getAllContacts(uid: String): Flow<Resource<List<ContactUI>>> = dataSource.getAllContacts(uid)
     override suspend fun addContact(uid: String, contactUI: ContactUI, uri: Uri) = dataSource.addContact(uid,contactUI,uri)
+    override suspend fun deleteContact(uid: String, id: String) = dataSource.deleteContact(uid, id)
 }

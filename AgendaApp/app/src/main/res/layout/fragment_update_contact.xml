@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            tools:text="test@test.com" />
+            tools:text="5567894321" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

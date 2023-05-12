@@ -37,15 +37,15 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }
     }
 
-    fun updateContact(uid : String, contactUI: ContactUI, id: String) {
+    fun updateContact(uid : String, contactUI: ContactUI) {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.updateContact(uid, contactUI, id)
+            repo.updateContact(uid, contactUI)
         }
     }
 
-    fun deleteContact(uid: String, id: String) {
+    fun deleteContact(uid: String, contactUI: ContactUI) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteContact(uid, id)
+            repo.deleteContact(uid, contactUI)
         }
     }
 }

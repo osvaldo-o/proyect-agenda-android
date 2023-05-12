@@ -105,7 +105,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
 
     private fun addContact (uid: String, photoURI: Uri) {
         val alertDialog = AlertDialog.Builder(requireContext()).setView(R.layout.msg_loading).create()
-        viewModel.addContact(uid, ContactUI(binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),binding.EditTextPhone.text.toString()),photoURI).observe(viewLifecycleOwner) {
+        viewModel.addContact(uid, ContactUI(email = binding.EditTextEmail.text.toString(),name = binding.EditTextName.text.toString(), phone = binding.EditTextPhone.text.toString()),photoURI).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
                     alertDialog.show()

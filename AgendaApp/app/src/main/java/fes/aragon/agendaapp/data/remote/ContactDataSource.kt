@@ -1,11 +1,13 @@
 package fes.aragon.agendaapp.data.remote
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import fes.aragon.agendaapp.data.model.ContactDB
 import fes.aragon.agendaapp.data.model.ContactUI
+import fes.aragon.agendaapp.data.model.toContactDB
 import fes.aragon.agendaapp.data.model.toContactUI
 import fes.aragon.agendaapp.repository.Resource
 import kotlinx.coroutines.channels.awaitClose
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
+import kotlin.math.log
 
 class ContactDataSource {
     suspend fun getAllContacts(uid: String) : Flow<Resource<List<ContactUI>>> = callbackFlow {
@@ -43,20 +46,21 @@ class ContactDataSource {
     }
 
     suspend fun addContact(uid: String, contactUI: ContactUI, uri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().reference
-        val imagesRef = storageRef.child("images/${UUID.randomUUID()}.jpg")
-        contactUI.picture = imagesRef.putFile(uri).await().storage.downloadUrl.await().toString()
+        val imageUUID = UUID.randomUUID()
+        contactUI.uuid_picture = imageUUID.toString()
+        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putFile(uri).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
-            .collection("contacts").add(contactUI).await()
+            .collection("contacts").add(contactUI.toContactDB()).await()
     }
 
-    suspend fun deleteContact(uid: String, id: String) {
+    suspend fun deleteContact(uid: String, contactUI: ContactUI) {
+        FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
         FirebaseFirestore.getInstance().collection("users").document(uid)
-            .collection("contacts").document(id).delete().await()
+            .collection("contacts").document(contactUI.id).delete().await()
     }
 
-    suspend fun updateContact(uid : String, contactUI: ContactUI, id: String) {
+    suspend fun updateContact(uid : String, contactUI: ContactUI) {
         FirebaseFirestore.getInstance().collection("users").document(uid)
-            .collection("contacts").document(id).set(contactUI).await()
+            .collection("contacts").document(contactUI.id).set(contactUI).await()
     }
 }

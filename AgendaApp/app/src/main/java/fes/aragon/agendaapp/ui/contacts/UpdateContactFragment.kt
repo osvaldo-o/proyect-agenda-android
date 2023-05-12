@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.ContactUI
@@ -36,9 +38,13 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         binding.EditTextEmail.setText(contactUI.email)
         binding.EditTextName.setText(contactUI.name)
         binding.EditTextPhone.setText(contactUI.phone)
+        Glide.with(requireContext())
+            .load(contactUI.picture)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(binding.imageView)
 
         binding.buttonUpdate.setOnClickListener {
-            viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString()),contactUI.id)
+            viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString()))
         }
     }
 }

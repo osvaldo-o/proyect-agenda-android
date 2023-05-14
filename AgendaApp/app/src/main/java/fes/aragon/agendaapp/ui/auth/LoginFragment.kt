@@ -57,7 +57,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     findNavController().navigate(R.id.action_loginFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
-                    Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {}
             }

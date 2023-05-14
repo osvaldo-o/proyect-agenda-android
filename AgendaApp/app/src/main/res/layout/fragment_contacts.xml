@@ -56,9 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:clickable="true"
         android:backgroundTint="@color/colorSecondary2"
-        android:src="@drawable/baseline_refresh_24"
+        android:clickable="true"
+        android:src="@drawable/baseline_drive_file_rename_outline_24"
         app:layout_constraintBottom_toBottomOf="@+id/addContact"
         app:layout_constraintStart_toEndOf="@+id/addContact"
         app:layout_constraintTop_toTopOf="@+id/addContact" />

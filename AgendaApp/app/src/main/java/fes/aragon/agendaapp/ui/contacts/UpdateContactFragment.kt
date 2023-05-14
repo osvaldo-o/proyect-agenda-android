@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
@@ -45,6 +46,7 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
 
         binding.buttonUpdate.setOnClickListener {
             viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString()))
+            findNavController().navigate(R.id.action_updateContactFragment_to_contactsFragment)
         }
     }
 }

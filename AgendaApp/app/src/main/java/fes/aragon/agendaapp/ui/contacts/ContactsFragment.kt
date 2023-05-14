@@ -37,7 +37,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
         binding.close.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            findNavController().navigate(R.id.action_contactsFragment_to_loginFragment2)
+            findNavController().navigate(R.id.action_contactsFragment_to_homeFragment)
         }
 
         binding.update.setOnClickListener {

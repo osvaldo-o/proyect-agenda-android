@@ -18,7 +18,6 @@ import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
-    private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val viewModel by viewModels<AuthViewModel> { AuthViewModelFactory(AuthRepoImpl(
         AuthDataSource()
     )) }
@@ -26,15 +25,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
-        isUserLoggedIn()
         doLogin()
-        goToSignUp()
-    }
-
-    private fun isUserLoggedIn() {
-        if (firebaseAuth.currentUser != null){
-            findNavController().navigate(R.id.action_loginFragment_to_contactsFragment)
-        }
     }
 
     private fun doLogin() {
@@ -44,12 +35,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             if(validateCredentials(email, password)){
                 signIn(email, password)
             }
-        }
-    }
-
-    private fun goToSignUp() {
-        binding.buttonToRegister.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment2)
         }
     }
 

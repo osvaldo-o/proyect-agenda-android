@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.auth.RegisterFragment"
     android:orientation="vertical"
-    android:gravity="center"
+    android:paddingTop="120dp"
+    android:paddingRight="20dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:background="@color/colorPrimary2">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/black"
         android:hint="Name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -20,13 +23,15 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/black"
         android:hint="E-email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -42,6 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/black"
         android:layout_marginBottom="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -57,6 +64,9 @@
         android:id="@+id/buttonToRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrar" />
+        android:text="Registrar"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/colorSecondary"
+        app:cornerRadius="20dp"/>
 
 </LinearLayout>

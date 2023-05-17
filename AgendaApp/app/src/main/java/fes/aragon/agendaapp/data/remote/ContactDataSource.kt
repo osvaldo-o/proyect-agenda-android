@@ -59,8 +59,18 @@ class ContactDataSource {
             .collection("contacts").document(contactUI.id).delete().await()
     }
 
-    suspend fun updateContact(uid : String, contactUI: ContactUI) {
+    suspend fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) {
+        /*if (uri == null){
+            FirebaseFirestore.getInstance().collection("users").document(uid)
+                .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
+        }else{
+            FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
+            val imageUUID = UUID.randomUUID()
+            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putFile(uri).await().storage.downloadUrl.await().toString()
+            FirebaseFirestore.getInstance().collection("users").document(uid)
+                .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
+        }*/
         FirebaseFirestore.getInstance().collection("users").document(uid)
-            .collection("contacts").document(contactUI.id).set(contactUI).await()
+            .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
     }
 }

@@ -70,7 +70,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
     private fun updateContact() {
         if (contactSelect != null) {
             findNavController().navigate(R.id.action_contactsFragment_to_updateContactFragment,
-                bundleOf("id" to contactSelect!!.id, "email" to contactSelect!!.email, "name" to contactSelect!!.name, "picture" to contactSelect!!.picture, "phone" to contactSelect!!.phone))
+                bundleOf("id" to contactSelect!!.id, "email" to contactSelect!!.email, "name" to contactSelect!!.name, "picture" to contactSelect!!.picture, "phone" to contactSelect!!.phone, "uuid_picture" to contactSelect!!.uuid_picture))
         } else {
             Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
         }

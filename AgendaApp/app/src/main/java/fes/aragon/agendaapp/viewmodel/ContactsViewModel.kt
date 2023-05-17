@@ -37,9 +37,9 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }
     }
 
-    fun updateContact(uid : String, contactUI: ContactUI) {
+    fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.updateContact(uid, contactUI)
+            repo.updateContact(uid, contactUI, uri)
         }
     }
 

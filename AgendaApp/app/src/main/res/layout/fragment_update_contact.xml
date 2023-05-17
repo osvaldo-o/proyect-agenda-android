@@ -95,7 +95,7 @@
         app:layout_constraintGuide_begin="221dp" />
 
     <Button
-        android:id="@+id/buttonAddPicture"
+        android:id="@+id/buttonUpdatePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

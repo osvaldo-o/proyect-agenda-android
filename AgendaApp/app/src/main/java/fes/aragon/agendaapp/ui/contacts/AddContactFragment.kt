@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -54,7 +55,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA),
                 1000
             )
-        }else{
+        } else {
             dispatchTakePictureIntent()
         }
     }
@@ -86,7 +87,6 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
                         val photoURI: Uri = FileProvider.getUriForFile(Objects.requireNonNull(requireContext()),BuildConfig.APPLICATION_ID+".provider",file)
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                         val data = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-                            binding.imageView.setImageURI(null)
                             binding.imageView.setImageURI(photoURI)
                         }
                         binding.buttonAddPicture.setOnClickListener {
@@ -115,8 +115,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
                     findNavController().navigate(R.id.action_addContactFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
-                    alertDialog.show()
-
+                    Toast.makeText(requireContext(),it.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         }

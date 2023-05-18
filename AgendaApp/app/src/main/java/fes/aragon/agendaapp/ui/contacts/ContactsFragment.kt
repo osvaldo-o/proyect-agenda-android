@@ -78,7 +78,18 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
     private fun deleteContact() {
         if (contactSelect != null){
-            viewModel.deleteContact(uid, contactSelect!!)
+            viewModel.deleteContact(uid, contactSelect!!).observe(viewLifecycleOwner, Observer {
+                when(it){
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        Toast.makeText(requireContext(),"Contact Eliminado",Toast.LENGTH_SHORT).show()
+                    }
+                    is Resource.Failure -> {
+                        Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
         } else {
             Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
         }
@@ -86,6 +97,5 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
     override fun onClick(contactUI: ContactUI) {
         contactSelect = contactUI.copy()
-        Toast.makeText(requireContext(),contactSelect!!.uuid_picture,Toast.LENGTH_SHORT).show()
     }
 }

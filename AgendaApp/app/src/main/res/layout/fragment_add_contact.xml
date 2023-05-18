@@ -77,16 +77,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/buttonAddContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="agregar contacto"
-        app:layout_constraintEnd_toEndOf="@+id/TextInputLayout3"
-        app:layout_constraintStart_toStartOf="@+id/TextInputLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/TextInputLayout3" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -100,11 +90,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:text="tomar foto"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/colorSecondary2"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <include
+        android:id="@+id/buttonAddContact"
+        layout="@layout/progress_btn_layout"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/TextInputLayout3"
+        app:layout_constraintStart_toStartOf="@+id/TextInputLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/TextInputLayout3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

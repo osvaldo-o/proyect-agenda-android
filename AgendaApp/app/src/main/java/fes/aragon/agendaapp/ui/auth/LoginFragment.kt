@@ -13,6 +13,7 @@ import fes.aragon.agendaapp.data.remote.AuthDataSource
 import fes.aragon.agendaapp.databinding.FragmentLoginBinding
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.repository.auth.AuthRepoImpl
+import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.AuthViewModel
 import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
 
@@ -54,12 +55,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.signIn(email, password).observe(viewLifecycleOwner, Observer {
             when(it){
                 is Resource.Success -> {
+                    binding.buttonSingIn.isClickable = true
                     findNavController().navigate(R.id.action_loginFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
+                    binding.buttonSingIn.isClickable = true
                     Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_LONG).show()
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.buttonSingIn.isClickable = false
+                }
             }
         })
     }

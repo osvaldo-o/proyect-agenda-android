@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,7 +25,9 @@ import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentUpdateContactBinding
+import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.repository.database.ContactRepoImpl
+import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 import java.io.File
@@ -34,6 +37,7 @@ import java.util.*
 
 class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     private lateinit var binding: FragmentUpdateContactBinding
+    private lateinit var progressButton: ProgressButton
     private lateinit var contactUI: ContactUI
     private val uid = FirebaseAuth.getInstance().uid ?: ""
     private lateinit var currentPhotoPath: String
@@ -45,6 +49,8 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentUpdateContactBinding.bind(view)
+        progressButton = ProgressButton(binding.buttonUpdate.root,"ACTUALIZAR")
+
         arguments?.let {
             val id = it.getString("id")!!
             val email = it.getString("email")!!
@@ -80,9 +86,8 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
             dispatchTakePictureIntent()
         }
 
-        binding.buttonUpdate.setOnClickListener {
-            viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString(),contactUI.uuid_picture),photoURI)
-            findNavController().navigate(R.id.action_updateContactFragment_to_contactsFragment)
+        binding.buttonUpdate.cardView.setOnClickListener {
+            updateContact()
         }
     }
 
@@ -124,6 +129,23 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
                 }
             }
         }
+    }
+
+    private fun updateContact() {
+        viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString(),contactUI.uuid_picture),photoURI).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            when(it){
+                is Resource.Loading -> {
+                    progressButton.buttonActivate("SUBIENDO CAMBIOS")
+                }
+                is Resource.Success -> {
+                    findNavController().navigate(R.id.action_updateContactFragment_to_contactsFragment)
+                }
+                is Resource.Failure -> {
+                    progressButton.buttonFinish("ACTUALIZAR")
+                    Toast.makeText(requireContext(),it.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
 }

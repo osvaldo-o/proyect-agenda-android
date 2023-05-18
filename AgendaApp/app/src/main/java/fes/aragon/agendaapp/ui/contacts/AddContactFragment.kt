@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -26,6 +25,7 @@ import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentAddContactBinding
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.repository.database.ContactRepoImpl
+import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 import java.io.File
@@ -36,11 +36,13 @@ import java.util.*
 class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
     private lateinit var binding: FragmentAddContactBinding
     private lateinit var currentPhotoPath: String
+    private lateinit var progressButton: ProgressButton
     private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddContactBinding.bind(view)
+        progressButton = ProgressButton(binding.buttonAddContact.root,"AGREGAR")
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -92,7 +94,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
                         binding.buttonAddPicture.setOnClickListener {
                             data.launch(photoURI)
                         }
-                        binding.buttonAddContact.setOnClickListener {
+                        binding.buttonAddContact.cardView.setOnClickListener {
                             FirebaseAuth.getInstance().uid?.let { uid ->
                                 addContact(uid,photoURI)
                             }
@@ -104,17 +106,16 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
     }
 
     private fun addContact (uid: String, photoURI: Uri) {
-        val alertDialog = AlertDialog.Builder(requireContext()).setView(R.layout.msg_loading).create()
         viewModel.addContact(uid, ContactUI(email = binding.EditTextEmail.text.toString(),name = binding.EditTextName.text.toString(), phone = binding.EditTextPhone.text.toString()),photoURI).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
-                    alertDialog.show()
+                    progressButton.buttonActivate("SUBIENDO CONTACTO")
                 }
                 is Resource.Success -> {
-                    alertDialog.dismiss()
                     findNavController().navigate(R.id.action_addContactFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
+                    progressButton.buttonFinish("AGREGAR")
                     Toast.makeText(requireContext(),it.toString(), Toast.LENGTH_SHORT).show()
                 }
             }

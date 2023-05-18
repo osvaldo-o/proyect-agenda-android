@@ -8,10 +8,9 @@ import androidx.lifecycle.viewModelScope
 import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.repository.database.ContactsRepo
 import fes.aragon.agendaapp.repository.Resource
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import kotlin.Exception
 
 class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
 
@@ -32,20 +31,26 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         emit(Resource.Loading())
         try {
             emit(Resource.Success(repo.addContact(uid,contactUI,uri)))
+        }catch (e: Exception) {
+            emit(Resource.Failure(e))
+        }
+    }
+
+    fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) = liveData(Dispatchers.IO){
+        emit(Resource.Loading())
+        try {
+            emit(Resource.Success(repo.updateContact(uid, contactUI, uri)))
         }catch (e: Exception){
             emit(Resource.Failure(e))
         }
     }
 
-    fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.updateContact(uid, contactUI, uri)
-        }
-    }
-
-    fun deleteContact(uid: String, contactUI: ContactUI) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteContact(uid, contactUI)
+    fun deleteContact(uid: String, contactUI: ContactUI) = liveData(Dispatchers.IO) {
+        emit(Resource.Loading())
+        try {
+            emit(Resource.Success(repo.deleteContact(uid, contactUI)))
+        }catch (e: Exception){
+            emit(Resource.Failure(e))
         }
     }
 }

@@ -96,7 +96,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="fes.aragon.agendaapp.ui.HomeFragment"
+        android:name="fes.aragon.agendaapp.ui.main.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action

@@ -27,19 +27,19 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }
     }
 
-    fun addContact(uid: String, contactUI: ContactUI, uri: Uri) = liveData(Dispatchers.IO) {
+    fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray) = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(repo.addContact(uid,contactUI,uri)))
+            emit(Resource.Success(repo.addContact(uid,contactUI,image)))
         }catch (e: Exception) {
             emit(Resource.Failure(e))
         }
     }
 
-    fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) = liveData(Dispatchers.IO){
+    fun updateContact(uid : String, contactUI: ContactUI, image:  ByteArray?) = liveData(Dispatchers.IO){
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(repo.updateContact(uid, contactUI, uri)))
+            emit(Resource.Success(repo.updateContact(uid, contactUI, image)))
         }catch (e: Exception){
             emit(Resource.Failure(e))
         }

@@ -45,10 +45,10 @@ class ContactDataSource {
         awaitClose{ subscribe?.remove() }
     }
 
-    suspend fun addContact(uid: String, contactUI: ContactUI, uri: Uri) {
+    suspend fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray) {
         val imageUUID = UUID.randomUUID()
         contactUI.uuid_picture = imageUUID.toString()
-        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putFile(uri).await().storage.downloadUrl.await().toString()
+        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").add(contactUI.toContactDB()).await()
     }
@@ -59,18 +59,16 @@ class ContactDataSource {
             .collection("contacts").document(contactUI.id).delete().await()
     }
 
-    suspend fun updateContact(uid : String, contactUI: ContactUI, uri: Uri?) {
-        /*if (uri == null){
+    suspend fun updateContact(uid : String, contactUI: ContactUI, image:  ByteArray?) {
+        if (image != null){
+            FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
+            val imageUUID = UUID.randomUUID()
+            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
             FirebaseFirestore.getInstance().collection("users").document(uid)
                 .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
         }else{
-            FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
-            val imageUUID = UUID.randomUUID()
-            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putFile(uri).await().storage.downloadUrl.await().toString()
             FirebaseFirestore.getInstance().collection("users").document(uid)
                 .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
-        }*/
-        FirebaseFirestore.getInstance().collection("users").document(uid)
-            .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
+        }
     }
 }

@@ -1,4 +1,4 @@
-package fes.aragon.agendaapp.ui
+package fes.aragon.agendaapp.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

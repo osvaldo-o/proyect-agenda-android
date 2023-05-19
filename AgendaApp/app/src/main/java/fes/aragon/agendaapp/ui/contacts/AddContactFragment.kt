@@ -40,7 +40,10 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         }
 
         binding.buttonAddContact.cardView.setOnClickListener {
-            addContact()
+            val email = binding.EditTextEmail.text.toString().trim()
+            val name = binding.EditTextName.text.toString().trim()
+            val phone = binding.EditTextPhone.text.toString().trim()
+            if (validate(name, email, phone)) addContact(name, email, phone)
         }
     }
 
@@ -54,8 +57,8 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         }
     })
 
-    private fun addContact () {
-        viewModel.addContact(ContactUI(email = binding.EditTextEmail.text.toString(),name = binding.EditTextName.text.toString(), phone = binding.EditTextPhone.text.toString()),image!!).observe(viewLifecycleOwner) {
+    private fun addContact (name: String, email: String, phone: String) {
+        viewModel.addContact(ContactUI(email = email,name = name, phone = phone),image!!).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
                     progressButton.buttonActivate("SUBIENDO CONTACTO")
@@ -69,6 +72,27 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
                 }
             }
         }
+    }
+
+    private fun validate(name: String, email: String, phone: String): Boolean {
+        var pass = true
+        if (name.isEmpty()) {
+            binding.EditTextName.error = "Nombre vacio"
+            pass = false
+        }
+        if (email.isEmpty()) {
+            binding.EditTextEmail.error = "Correo vacio"
+            pass = false
+        }
+        if (phone.isEmpty()) {
+            binding.EditTextPhone.error = "Telefono vacio"
+            pass = false
+        }
+        if (image == null) {
+            Toast.makeText(requireContext(),"Te falta la foto", Toast.LENGTH_SHORT).show()
+            pass = false
+        }
+        return pass
     }
 
 }

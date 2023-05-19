@@ -47,8 +47,28 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         }
 
         binding.buttonUpdate.cardView.setOnClickListener {
-            updateContact()
+            val email = binding.EditTextEmail.text.toString().trim()
+            val name = binding.EditTextName.text.toString().trim()
+            val phone = binding.EditTextPhone.text.toString().trim()
+            if (validate(name, email, phone)) updateContact(name, email, phone)
         }
+    }
+
+    private fun validate(name: String, email: String, phone: String): Boolean {
+        var pass = true
+        if (name.isEmpty()) {
+            binding.EditTextName.error = "Nombre vacio"
+            pass = false
+        }
+        if (email.isEmpty()) {
+            binding.EditTextEmail.error = "Correo vacio"
+            pass = false
+        }
+        if (phone.isEmpty()) {
+            binding.EditTextPhone.error = "Telefono vacio"
+            pass = false
+        }
+        return pass
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
@@ -83,8 +103,8 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
             .into(binding.imageView)
     }
 
-    private fun updateContact() {
-        viewModel.updateContact(ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString(),contactUI.uuid_picture),image).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+    private fun updateContact(name: String, email: String, phone: String) {
+        viewModel.updateContact(ContactUI(contactUI.id,email,name,contactUI.picture,phone,contactUI.uuid_picture),image).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when(it){
                 is Resource.Loading -> {
                     progressButton.buttonActivate("SUBIENDO CAMBIOS")

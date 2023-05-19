@@ -66,6 +66,7 @@ class ContactDataSource {
         if (image != null){
             FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.copy().uuid_picture}").delete().await()
             val imageUUID = UUID.randomUUID()
+            contactUI.uuid_picture = imageUUID.toString()
             contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
             FirebaseFirestore.getInstance().collection("users").document(uid)
                 .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()

@@ -51,22 +51,22 @@ class ContactDataSource {
     suspend fun addContact(contactUI: ContactUI, image:  ByteArray) {
         val imageUUID = UUID.randomUUID()
         contactUI.uuid_picture = imageUUID.toString()
-        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
+        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").add(contactUI.toContactDB()).await()
     }
 
     suspend fun deleteContact(contactUI: ContactUI) {
-        FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
+        FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.uuid_picture}").delete().await()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").document(contactUI.id).delete().await()
     }
 
     suspend fun updateContact(contactUI: ContactUI, image:  ByteArray?) {
         if (image != null){
-            FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
+            FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.copy().uuid_picture}").delete().await()
             val imageUUID = UUID.randomUUID()
-            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
+            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
             FirebaseFirestore.getInstance().collection("users").document(uid)
                 .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
         }else{

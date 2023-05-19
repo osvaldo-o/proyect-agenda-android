@@ -1,8 +1,11 @@
 package fes.aragon.agendaapp.ui.contacts
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -47,6 +50,12 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         }
     }
 
+    private fun isOnline(): Boolean {
+        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
+    }
+
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
         if(it.resultCode == Activity.RESULT_OK){
             val imageBitmap = it.data?.extras?.get("data") as Bitmap
@@ -75,24 +84,27 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
     }
 
     private fun validate(name: String, email: String, phone: String): Boolean {
-        var pass = true
         if (name.isEmpty()) {
             binding.EditTextName.error = "Nombre vacio"
-            pass = false
+            return false
         }
         if (email.isEmpty()) {
             binding.EditTextEmail.error = "Correo vacio"
-            pass = false
+            return false
         }
         if (phone.isEmpty()) {
             binding.EditTextPhone.error = "Telefono vacio"
-            pass = false
+            return false
         }
         if (image == null) {
             Toast.makeText(requireContext(),"Te falta la foto", Toast.LENGTH_SHORT).show()
-            pass = false
+            return false
         }
-        return pass
+        if (!isOnline()) {
+            Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
     }
 
 }

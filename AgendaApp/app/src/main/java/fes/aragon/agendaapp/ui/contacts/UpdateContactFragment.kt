@@ -1,8 +1,11 @@
 package fes.aragon.agendaapp.ui.contacts
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -54,6 +57,12 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         }
     }
 
+    private fun isOnline(): Boolean {
+        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
+    }
+
     private fun validate(name: String, email: String, phone: String): Boolean {
         var pass = true
         if (name.isEmpty()) {
@@ -66,6 +75,10 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         }
         if (phone.isEmpty()) {
             binding.EditTextPhone.error = "Telefono vacio"
+            pass = false
+        }
+        if (!isOnline()) {
+            Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show()
             pass = false
         }
         return pass

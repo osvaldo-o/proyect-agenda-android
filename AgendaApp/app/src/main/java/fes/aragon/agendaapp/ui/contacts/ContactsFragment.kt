@@ -1,8 +1,12 @@
 package fes.aragon.agendaapp.ui.contacts
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -44,7 +48,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         }
 
         binding.delete.setOnClickListener {
-            deleteContact()
+            if (isOnline()) { deleteContact() }
+            else{ Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show() }
         }
     }
 
@@ -92,6 +97,12 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         } else {
             Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun isOnline(): Boolean {
+        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
     }
 
     override fun onClick(contactUI: ContactUI) {

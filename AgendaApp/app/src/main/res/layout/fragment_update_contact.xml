@@ -97,7 +97,7 @@
     <include
         android:id="@+id/buttonUpdate"
         layout="@layout/progress_btn_layout"
-        android:layout_width="280dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@+id/TextInputLayout3"

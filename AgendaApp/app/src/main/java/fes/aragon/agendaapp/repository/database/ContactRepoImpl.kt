@@ -7,8 +7,8 @@ import fes.aragon.agendaapp.repository.Resource
 import kotlinx.coroutines.flow.Flow
 
 class ContactRepoImpl(private val dataSource: ContactDataSource) : ContactsRepo {
-    override suspend fun getAllContacts(uid: String): Flow<Resource<List<ContactUI>>> = dataSource.getAllContacts(uid)
-    override suspend fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray) = dataSource.addContact(uid,contactUI,image)
-    override suspend fun deleteContact(uid: String, contactUI: ContactUI) = dataSource.deleteContact(uid, contactUI)
-    override suspend fun updateContact(uid: String, contactUI: ContactUI, image:  ByteArray?) = dataSource.updateContact(uid, contactUI, image)
+    override suspend fun getAllContacts(): Flow<Resource<List<ContactUI>>> = dataSource.getAllContacts()
+    override suspend fun addContact(contactUI: ContactUI, image:  ByteArray) = dataSource.addContact(contactUI,image)
+    override suspend fun deleteContact(contactUI: ContactUI) = dataSource.deleteContact(contactUI)
+    override suspend fun updateContact(contactUI: ContactUI, image:  ByteArray?) = dataSource.updateContact(contactUI, image)
 }

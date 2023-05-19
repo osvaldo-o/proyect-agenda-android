@@ -2,6 +2,7 @@ package fes.aragon.agendaapp.data.remote
 
 import android.net.Uri
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -18,7 +19,9 @@ import java.util.UUID
 import kotlin.math.log
 
 class ContactDataSource {
-    suspend fun getAllContacts(uid: String) : Flow<Resource<List<ContactUI>>> = callbackFlow {
+
+    private val uid = FirebaseAuth.getInstance().uid ?: ""
+    suspend fun getAllContacts() : Flow<Resource<List<ContactUI>>> = callbackFlow {
         val contactsList = mutableListOf<ContactUI>()
 
         var reference: CollectionReference? = null
@@ -45,7 +48,7 @@ class ContactDataSource {
         awaitClose{ subscribe?.remove() }
     }
 
-    suspend fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray) {
+    suspend fun addContact(contactUI: ContactUI, image:  ByteArray) {
         val imageUUID = UUID.randomUUID()
         contactUI.uuid_picture = imageUUID.toString()
         contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
@@ -53,13 +56,13 @@ class ContactDataSource {
             .collection("contacts").add(contactUI.toContactDB()).await()
     }
 
-    suspend fun deleteContact(uid: String, contactUI: ContactUI) {
+    suspend fun deleteContact(contactUI: ContactUI) {
         FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").document(contactUI.id).delete().await()
     }
 
-    suspend fun updateContact(uid : String, contactUI: ContactUI, image:  ByteArray?) {
+    suspend fun updateContact(contactUI: ContactUI, image:  ByteArray?) {
         if (image != null){
             FirebaseStorage.getInstance().reference.child("images/${contactUI.uuid_picture}").delete().await()
             val imageUUID = UUID.randomUUID()

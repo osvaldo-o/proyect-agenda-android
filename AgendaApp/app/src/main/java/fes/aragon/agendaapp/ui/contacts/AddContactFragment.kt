@@ -40,9 +40,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         }
 
         binding.buttonAddContact.cardView.setOnClickListener {
-            FirebaseAuth.getInstance().uid?.let {
-                addContact(it)
-            }
+            addContact()
         }
     }
 
@@ -56,8 +54,8 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         }
     })
 
-    private fun addContact (uid: String) {
-        viewModel.addContact(uid, ContactUI(email = binding.EditTextEmail.text.toString(),name = binding.EditTextName.text.toString(), phone = binding.EditTextPhone.text.toString()),image!!).observe(viewLifecycleOwner) {
+    private fun addContact () {
+        viewModel.addContact(ContactUI(email = binding.EditTextEmail.text.toString(),name = binding.EditTextName.text.toString(), phone = binding.EditTextPhone.text.toString()),image!!).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
                     progressButton.buttonActivate("SUBIENDO CONTACTO")

@@ -23,14 +23,13 @@ import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
     private var contactSelect: ContactUI? = null
     private lateinit var binding: FragmentContactsBinding
-    private val uid = FirebaseAuth.getInstance().uid ?: ""
     private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentContactsBinding.bind(view)
-        getAllContacts(uid)
 
+        getAllContacts()
         binding.addContact.setOnClickListener {
             findNavController().navigate(R.id.action_contactsFragment_to_addContactFragment)
         }
@@ -49,8 +48,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         }
     }
 
-    private fun getAllContacts(uid: String){
-        viewModel.fetchLatestContacts(uid).observe(viewLifecycleOwner, Observer {
+    private fun getAllContacts() {
+        viewModel.fetchLatestContacts().observe(viewLifecycleOwner, Observer {
             when(it){
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -78,7 +77,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
     private fun deleteContact() {
         if (contactSelect != null){
-            viewModel.deleteContact(uid, contactSelect!!).observe(viewLifecycleOwner, Observer {
+            viewModel.deleteContact(contactSelect!!).observe(viewLifecycleOwner, Observer {
                 when(it){
                     is Resource.Loading -> {
                     }

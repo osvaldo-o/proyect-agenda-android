@@ -14,10 +14,10 @@ import kotlin.Exception
 
 class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
 
-    fun fetchLatestContacts(uid: String) = liveData(Dispatchers.IO) {
+    fun fetchLatestContacts() = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
         kotlin.runCatching {
-            repo.getAllContacts(uid)
+            repo.getAllContacts()
         }.onSuccess { flow ->
             flow.collect{
                 emit(it)
@@ -27,28 +27,28 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }
     }
 
-    fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray) = liveData(Dispatchers.IO) {
+    fun addContact(contactUI: ContactUI, image:  ByteArray) = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(repo.addContact(uid,contactUI,image)))
+            emit(Resource.Success(repo.addContact(contactUI,image)))
         }catch (e: Exception) {
             emit(Resource.Failure(e))
         }
     }
 
-    fun updateContact(uid : String, contactUI: ContactUI, image:  ByteArray?) = liveData(Dispatchers.IO){
+    fun updateContact(contactUI: ContactUI, image:  ByteArray?) = liveData(Dispatchers.IO){
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(repo.updateContact(uid, contactUI, image)))
+            emit(Resource.Success(repo.updateContact(contactUI, image)))
         }catch (e: Exception){
             emit(Resource.Failure(e))
         }
     }
 
-    fun deleteContact(uid: String, contactUI: ContactUI) = liveData(Dispatchers.IO) {
+    fun deleteContact(contactUI: ContactUI) = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
         try {
-            emit(Resource.Success(repo.deleteContact(uid, contactUI)))
+            emit(Resource.Success(repo.deleteContact(contactUI)))
         }catch (e: Exception){
             emit(Resource.Failure(e))
         }

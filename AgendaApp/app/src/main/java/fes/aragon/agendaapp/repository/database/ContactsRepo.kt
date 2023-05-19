@@ -6,8 +6,8 @@ import fes.aragon.agendaapp.repository.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepo {
-    suspend fun getAllContacts(uid: String): Flow<Resource<List<ContactUI>>>
-    suspend fun addContact(uid: String, contactUI: ContactUI, image:  ByteArray)
-    suspend fun deleteContact(uid: String, contactUI: ContactUI)
-    suspend fun updateContact(uid : String, contactUI: ContactUI, image:  ByteArray?)
+    suspend fun getAllContacts(): Flow<Resource<List<ContactUI>>>
+    suspend fun addContact(contactUI: ContactUI, image:  ByteArray)
+    suspend fun deleteContact(contactUI: ContactUI)
+    suspend fun updateContact(contactUI: ContactUI, image:  ByteArray?)
 }

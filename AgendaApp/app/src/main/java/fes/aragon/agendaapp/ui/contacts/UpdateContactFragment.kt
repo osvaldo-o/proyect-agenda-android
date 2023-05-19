@@ -32,7 +32,6 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     private lateinit var binding: FragmentUpdateContactBinding
     private lateinit var progressButton: ProgressButton
     private lateinit var contactUI: ContactUI
-    private val uid = FirebaseAuth.getInstance().uid ?: ""
     private var image: ByteArray? = null
     private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(
         ContactRepoImpl(ContactDataSource())
@@ -85,7 +84,7 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     }
 
     private fun updateContact() {
-        viewModel.updateContact(uid, ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString(),contactUI.uuid_picture),image).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.updateContact(ContactUI(contactUI.id,binding.EditTextEmail.text.toString(),binding.EditTextName.text.toString(),contactUI.picture,binding.EditTextPhone.text.toString(),contactUI.uuid_picture),image).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when(it){
                 is Resource.Loading -> {
                     progressButton.buttonActivate("SUBIENDO CAMBIOS")

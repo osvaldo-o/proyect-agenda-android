@@ -1,7 +1,5 @@
 package fes.aragon.agendaapp.data.remote
 
-import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
-import kotlin.math.log
 
 class ContactDataSource {
 
@@ -57,17 +54,14 @@ class ContactDataSource {
     }
 
     suspend fun deleteContact(contactUI: ContactUI) {
-        FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.uuid_picture}").delete().await()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").document(contactUI.id).delete().await()
+        FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.uuid_picture}").delete().await()
     }
 
     suspend fun updateContact(contactUI: ContactUI, image:  ByteArray?) {
         if (image != null){
-            FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.copy().uuid_picture}").delete().await()
-            val imageUUID = UUID.randomUUID()
-            contactUI.uuid_picture = imageUUID.toString()
-            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
+            contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.uuid_picture}").putBytes(image).await().storage.downloadUrl.await().toString()
             FirebaseFirestore.getInstance().collection("users").document(uid)
                 .collection("contacts").document(contactUI.id).set(contactUI.toContactDB()).await()
         }else{

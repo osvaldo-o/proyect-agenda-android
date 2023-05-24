@@ -15,23 +15,21 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.ContactUI
-import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentAddContactBinding
 import fes.aragon.agendaapp.repository.Resource
-import fes.aragon.agendaapp.repository.database.ContactRepoImpl
 import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
-import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 import java.io.ByteArrayOutputStream
 
+@AndroidEntryPoint
 class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
     private lateinit var binding: FragmentAddContactBinding
     private lateinit var progressButton: ProgressButton
     private var image: ByteArray? = null
-    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
+    private val viewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

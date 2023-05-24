@@ -5,14 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.repository.database.ContactsRepo
 import fes.aragon.agendaapp.repository.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.Exception
 
-class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
+@HiltViewModel
+class ContactsViewModel @Inject constructor(private val repo: ContactsRepo) : ViewModel() {
 
     fun fetchLatestContacts() = liveData(Dispatchers.IO) {
         emit(Resource.Loading())
@@ -52,11 +55,5 @@ class ContactsViewModel(private val repo: ContactsRepo) : ViewModel() {
         }catch (e: Exception){
             emit(Resource.Failure(e))
         }
-    }
-}
-
-class ContactsViewModelFactory(private val repo: ContactsRepo): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(ContactsRepo::class.java).newInstance(repo)
     }
 }

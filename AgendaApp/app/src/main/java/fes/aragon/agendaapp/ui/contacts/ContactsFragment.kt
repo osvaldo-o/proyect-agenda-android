@@ -6,28 +6,26 @@ import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.ContactUI
-import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentContactsBinding
-import fes.aragon.agendaapp.repository.database.ContactRepoImpl
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.ui.contacts.adapters.ContactAdapter
 import fes.aragon.agendaapp.ui.contacts.adapters.OnClickListener
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
-import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 
+@AndroidEntryPoint
 class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
     private var contactSelect: ContactUI? = null
     private lateinit var binding: FragmentContactsBinding
-    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(ContactRepoImpl(ContactDataSource())) }
+    private val viewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

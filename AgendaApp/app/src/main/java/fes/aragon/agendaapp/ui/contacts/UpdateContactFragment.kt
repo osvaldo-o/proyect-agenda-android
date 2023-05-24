@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -18,27 +17,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import fes.aragon.agendaapp.R
 import fes.aragon.agendaapp.data.model.ContactUI
-import fes.aragon.agendaapp.data.remote.ContactDataSource
 import fes.aragon.agendaapp.databinding.FragmentUpdateContactBinding
 import fes.aragon.agendaapp.repository.Resource
-import fes.aragon.agendaapp.repository.database.ContactRepoImpl
 import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
-import fes.aragon.agendaapp.viewmodel.ContactsViewModelFactory
 import java.io.ByteArrayOutputStream
-import java.util.*
 
+@AndroidEntryPoint
 class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     private lateinit var binding: FragmentUpdateContactBinding
     private lateinit var progressButton: ProgressButton
     private lateinit var contactUI: ContactUI
     private var image: ByteArray? = null
-    private val viewModel by viewModels<ContactsViewModel> { ContactsViewModelFactory(
-        ContactRepoImpl(ContactDataSource())
-    ) }
+    private val viewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

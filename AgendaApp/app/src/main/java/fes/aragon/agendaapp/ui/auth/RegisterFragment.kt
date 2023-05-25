@@ -7,17 +7,16 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import fes.aragon.agendaapp.R
-import fes.aragon.agendaapp.data.remote.AuthDataSource
 import fes.aragon.agendaapp.databinding.FragmentRegisterBinding
 import fes.aragon.agendaapp.repository.Resource
-import fes.aragon.agendaapp.repository.auth.AuthRepoImpl
 import fes.aragon.agendaapp.viewmodel.AuthViewModel
-import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register,) {
     private lateinit var  binding: FragmentRegisterBinding
-    private val viewModel by viewModels<AuthViewModel> { AuthViewModelFactory(AuthRepoImpl(AuthDataSource())) }
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,7 +38,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register,) {
                         is Resource.Loading -> {}
                         is Resource.Success -> {
                             findNavController().navigate(R.id.action_registerFragment2_to_contactsFragment)
-                            Toast.makeText(requireContext(),"Bienvenido ${it.data?.email}",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),"Bienvenido $name",Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
@@ -47,7 +46,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register,) {
         }
     }
 
-    private fun validate(name: String, email: String, password: String): Boolean{
+    private fun validate(name: String, email: String, password: String): Boolean {
         if (name.isEmpty()){
             binding.editTextName.error = "name vacio"
             return false

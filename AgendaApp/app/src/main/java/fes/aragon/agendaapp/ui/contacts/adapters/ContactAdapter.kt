@@ -14,9 +14,8 @@ import fes.aragon.agendaapp.databinding.ItemContactBinding
 class ContactAdapter(private val contactUIS: List<ContactUI>, private val listener: OnClickListener) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     private lateinit var context: Context
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemContactBinding.bind(view)
-
         fun onClick(contactUI: ContactUI) {
             binding.root.setOnClickListener {
                 listener.onClick(contactUI)

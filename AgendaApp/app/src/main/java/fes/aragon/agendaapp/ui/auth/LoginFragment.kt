@@ -7,22 +7,16 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import fes.aragon.agendaapp.R
-import fes.aragon.agendaapp.data.remote.AuthDataSource
 import fes.aragon.agendaapp.databinding.FragmentLoginBinding
 import fes.aragon.agendaapp.repository.Resource
-import fes.aragon.agendaapp.repository.auth.AuthRepoImpl
-import fes.aragon.agendaapp.ui.button.ProgressButton
 import fes.aragon.agendaapp.viewmodel.AuthViewModel
-import fes.aragon.agendaapp.viewmodel.AuthViewModelFactory
 
+@AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
-    private val viewModel by viewModels<AuthViewModel> { AuthViewModelFactory(AuthRepoImpl(
-        AuthDataSource()
-    )) }
-
+    private val viewModel: AuthViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)

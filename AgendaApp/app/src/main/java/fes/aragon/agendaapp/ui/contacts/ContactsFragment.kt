@@ -47,7 +47,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
 
         binding.delete.setOnClickListener {
             if (isOnline()) { deleteContact() }
-            else{ Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show() }
+            else { Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show() }
         }
     }
 
@@ -82,10 +82,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         if (contactSelect != null){
             viewModel.deleteContact(contactSelect!!).observe(viewLifecycleOwner, Observer {
                 when(it){
-                    is Resource.Loading -> {
-                    }
+                    is Resource.Loading -> {}
                     is Resource.Success -> {
-                        Toast.makeText(requireContext(),"Contact Eliminado",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"Contacto Eliminado",Toast.LENGTH_SHORT).show()
+                        contactSelect = null
                     }
                     is Resource.Failure -> {
                         Toast.makeText(requireContext(),"${it.exception}",Toast.LENGTH_SHORT).show()

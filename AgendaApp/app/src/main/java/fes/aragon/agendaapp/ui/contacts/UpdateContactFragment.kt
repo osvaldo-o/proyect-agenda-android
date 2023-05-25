@@ -60,11 +60,11 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     private fun validate(name: String, email: String, phone: String): Boolean {
         var pass = true
         if (name.isEmpty()) {
-            binding.EditTextName.error = "Nombre vacio"
+            binding.EditTextName.error = "Campo vacio"
             pass = false
         }
         if (email.isEmpty()) {
-            binding.EditTextEmail.error = "Correo vacio"
+            binding.EditTextEmail.error = "Campo vacio"
             pass = false
         }
         if (phone.isEmpty()) {

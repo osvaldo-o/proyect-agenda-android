@@ -23,6 +23,7 @@ import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.databinding.FragmentUpdateContactBinding
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.ui.button.ProgressButton
+import fes.aragon.agendaapp.ui.main.Utils
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import java.io.ByteArrayOutputStream
 
@@ -32,6 +33,7 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     private lateinit var progressButton: ProgressButton
     private lateinit var contactUI: ContactUI
     private var image: ByteArray? = null
+    private val utils = Utils()
     private val viewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,28 +53,22 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         }
     }
 
-    private fun isOnline(): Boolean {
-        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
-        return networkInfo?.isConnected == true
-    }
-
     private fun validate(name: String, email: String, phone: String): Boolean {
         var pass = true
         if (name.isEmpty()) {
-            binding.EditTextName.error = "Campo vacio"
+            binding.EditTextName.error = getString(R.string.campo_vacio)
             pass = false
         }
         if (email.isEmpty()) {
-            binding.EditTextEmail.error = "Campo vacio"
+            binding.EditTextEmail.error = getString(R.string.campo_vacio)
             pass = false
         }
         if (phone.isEmpty()) {
-            binding.EditTextPhone.error = "Telefono vacio"
+            binding.EditTextPhone.error = getString(R.string.campo_vacio)
             pass = false
         }
-        if (!isOnline()) {
-            Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show()
+        if (!utils.isOnline(requireContext())) {
+            Toast.makeText(requireContext(),R.string.sin_internet,Toast.LENGTH_SHORT).show()
             pass = false
         }
         return pass
@@ -89,7 +85,7 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
     })
 
     private fun init() {
-        progressButton = ProgressButton(binding.buttonUpdate.root,"ACTUALIZAR")
+        progressButton = ProgressButton(binding.buttonUpdate.root,getString(R.string.boton_actualizar))
         arguments?.let {
             val id = it.getString("id")!!
             val email = it.getString("email")!!
@@ -114,13 +110,13 @@ class UpdateContactFragment() : Fragment(R.layout.fragment_update_contact) {
         viewModel.updateContact(ContactUI(contactUI.id,email,name,contactUI.picture,phone,contactUI.uuid_picture),image).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when(it){
                 is Resource.Loading -> {
-                    progressButton.buttonActivate("SUBIENDO CAMBIOS")
+                    progressButton.buttonActivate(getString(R.string.subiendo_cambios))
                 }
                 is Resource.Success -> {
                     findNavController().navigate(R.id.action_updateContactFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
-                    progressButton.buttonFinish("ACTUALIZAR")
+                    progressButton.buttonFinish(getString(R.string.boton_actualizar))
                     Toast.makeText(requireContext(),it.toString(), Toast.LENGTH_SHORT).show()
                 }
             }

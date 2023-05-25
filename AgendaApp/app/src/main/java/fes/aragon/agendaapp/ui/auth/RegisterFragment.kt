@@ -33,9 +33,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register,) {
                 viewModel.signUp(email, password,name).observe(viewLifecycleOwner, Observer {
                     when(it){
                         is Resource.Failure -> {
+                            binding.buttonToRegister.isClickable = true
                             Toast.makeText(requireContext(),"${it.exception}", Toast.LENGTH_SHORT).show()
                         }
-                        is Resource.Loading -> {}
+                        is Resource.Loading -> {
+                            binding.buttonToRegister.isClickable = false
+                        }
                         is Resource.Success -> {
                             findNavController().navigate(R.id.action_registerFragment2_to_contactsFragment)
                             Toast.makeText(requireContext(),"Bienvenido $name",Toast.LENGTH_SHORT).show()
@@ -48,15 +51,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register,) {
 
     private fun validate(name: String, email: String, password: String): Boolean {
         if (name.isEmpty()){
-            binding.editTextName.error = "name vacio"
+            binding.editTextName.error = getString(R.string.campo_vacio)
             return false
         }
         if (email.isEmpty()){
-            binding.editTextEmail.error = "email vacio"
+            binding.editTextEmail.error = getString(R.string.campo_vacio)
             return false
         }
         if (password.isEmpty()){
-            binding.editTextPassword.error = "password vacio"
+            binding.editTextPassword.error = getString(R.string.campo_vacio)
             return false
         }
         return true

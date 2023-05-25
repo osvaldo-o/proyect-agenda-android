@@ -47,9 +47,8 @@ class ContactDataSourceImpl @Inject constructor() : ContactDataSource {
     }
 
     override suspend fun addContact(contactUI: ContactUI, image:  ByteArray) {
-        val imageUUID = UUID.randomUUID()
-        contactUI.uuid_picture = imageUUID.toString()
-        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/$imageUUID").putBytes(image).await().storage.downloadUrl.await().toString()
+        contactUI.uuid_picture = UUID.randomUUID().toString()
+        contactUI.picture = FirebaseStorage.getInstance().reference.child("images/$uid/${contactUI.uuid_picture}").putBytes(image).await().storage.downloadUrl.await().toString()
         FirebaseFirestore.getInstance().collection("users").document(uid)
             .collection("contacts").add(contactUI.toContactDB()).await()
     }

@@ -35,11 +35,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun validateCredentials(email: String, password: String): Boolean{
         if (email.isEmpty()){
-            binding.editTextEmail.error = "Email vacio"
+            binding.editTextEmail.error = getString(R.string.campo_vacio)
             return false
         }
         if (password.isEmpty()){
-            binding.editTextPassword.error = "Password vacio"
+            binding.editTextPassword.error = getString(R.string.campo_vacio)
             return false
         }
         return true

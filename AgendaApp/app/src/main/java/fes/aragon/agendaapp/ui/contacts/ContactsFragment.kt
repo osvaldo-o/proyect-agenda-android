@@ -1,8 +1,5 @@
 package fes.aragon.agendaapp.ui.contacts
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -19,6 +16,7 @@ import fes.aragon.agendaapp.databinding.FragmentContactsBinding
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.ui.contacts.adapters.ContactAdapter
 import fes.aragon.agendaapp.ui.contacts.adapters.OnClickListener
+import fes.aragon.agendaapp.ui.main.Utils
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 
 @AndroidEntryPoint
@@ -26,6 +24,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
     private var contactSelect: ContactUI? = null
     private lateinit var binding: FragmentContactsBinding
     private val viewModel: ContactsViewModel by viewModels()
+    private val utils = Utils()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,8 +45,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         }
 
         binding.delete.setOnClickListener {
-            if (isOnline()) { deleteContact() }
-            else { Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show() }
+            if (utils.isOnline(requireContext())) { deleteContact() }
+            else { Toast.makeText(requireContext(),R.string.sin_internet,Toast.LENGTH_SHORT).show() }
         }
     }
 
@@ -84,7 +83,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
                 when(it){
                     is Resource.Loading -> {}
                     is Resource.Success -> {
-                        Toast.makeText(requireContext(),"Contacto Eliminado",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"${contactSelect!!.name} eliminado",Toast.LENGTH_SHORT).show()
                         contactSelect = null
                     }
                     is Resource.Failure -> {
@@ -95,12 +94,6 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts), OnClickListener {
         } else {
             Toast.makeText(requireContext(),R.string.not_select_contact,Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun isOnline(): Boolean {
-        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
-        return networkInfo?.isConnected == true
     }
 
     override fun onClick(contactUI: ContactUI) {

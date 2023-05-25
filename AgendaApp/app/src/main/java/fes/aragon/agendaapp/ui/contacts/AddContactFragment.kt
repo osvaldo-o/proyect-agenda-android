@@ -21,6 +21,7 @@ import fes.aragon.agendaapp.data.model.ContactUI
 import fes.aragon.agendaapp.databinding.FragmentAddContactBinding
 import fes.aragon.agendaapp.repository.Resource
 import fes.aragon.agendaapp.ui.button.ProgressButton
+import fes.aragon.agendaapp.ui.main.Utils
 import fes.aragon.agendaapp.viewmodel.ContactsViewModel
 import java.io.ByteArrayOutputStream
 
@@ -29,29 +30,24 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
     private lateinit var binding: FragmentAddContactBinding
     private lateinit var progressButton: ProgressButton
     private var image: ByteArray? = null
+    private val utils = Utils()
     private val viewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAddContactBinding.bind(view)
-        progressButton = ProgressButton(binding.buttonAddContact.root,"AGREGAR")
+        progressButton = ProgressButton(binding.buttonAddContact.root,getString(R.string.boton_agregar))
 
         binding.buttonAddPicture.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
-
+        
         binding.buttonAddContact.cardView.setOnClickListener {
             val email = binding.EditTextEmail.text.toString().trim()
             val name = binding.EditTextName.text.toString().trim()
             val phone = binding.EditTextPhone.text.toString().trim()
             if (validate(name, email, phone)) addContact(name, email, phone)
         }
-    }
-
-    private fun isOnline(): Boolean {
-        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
-        return networkInfo?.isConnected == true
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
@@ -68,13 +64,13 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         viewModel.addContact(ContactUI(email = email,name = name, phone = phone),image!!).observe(viewLifecycleOwner) {
             when(it){
                 is Resource.Loading -> {
-                    progressButton.buttonActivate("SUBIENDO CONTACTO")
+                    progressButton.buttonActivate(getString(R.string.subiendo_contacto))
                 }
                 is Resource.Success -> {
                     findNavController().navigate(R.id.action_addContactFragment_to_contactsFragment)
                 }
                 is Resource.Failure -> {
-                    progressButton.buttonFinish("AGREGAR")
+                    progressButton.buttonFinish(getString(R.string.boton_agregar))
                     Toast.makeText(requireContext(),it.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -83,23 +79,23 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
 
     private fun validate(name: String, email: String, phone: String): Boolean {
         if (name.isEmpty()) {
-            binding.EditTextName.error = "Nombre vacio"
+            binding.EditTextName.error = getString(R.string.campo_vacio)
             return false
         }
         if (email.isEmpty()) {
-            binding.EditTextEmail.error = "Correo vacio"
+            binding.EditTextEmail.error = getString(R.string.campo_vacio)
             return false
         }
         if (phone.isEmpty()) {
-            binding.EditTextPhone.error = "Telefono vacio"
+            binding.EditTextPhone.error = getString(R.string.campo_vacio)
             return false
         }
         if (image == null) {
-            Toast.makeText(requireContext(),"Te falta la foto", Toast.LENGTH_SHORT).show()
+            utils.alert(requireContext(),getString(R.string.sin_foto))
             return false
         }
-        if (!isOnline()) {
-            Toast.makeText(requireContext(),"No hay conexión a intenet",Toast.LENGTH_SHORT).show()
+        if (!utils.isOnline(requireContext())) {
+            Toast.makeText(requireContext(),R.string.sin_internet,Toast.LENGTH_SHORT).show()
             return false
         }
         return true
